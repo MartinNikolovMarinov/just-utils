@@ -1,6 +1,6 @@
 'use strict';
 // Globals
-var assert = require('./../assertModule/assertModule'),
+var assert = require('./tests/lib/assertModule'),
 	roundRealNumber = function (number, precision) {
 		number =  number * Math.pow(10, precision);
 		number = Math.round(number);
@@ -44,7 +44,7 @@ var assert = require('./../assertModule/assertModule'),
 
 // Fraction object
 var Fraction = (function(){
-	
+
 	// @numerator: top part of a fraction
 	// @denominator:  bottom part of a fraction
 	function Fraction (numerator, denominator) {
@@ -56,7 +56,7 @@ var Fraction = (function(){
 	Fraction.prototype._setFractionSign = function() {
 		if (this.numerator > 0 && this.denominator > 0 ||
 			this.numerator < 0 && this.denominator < 0) {
-		
+
 			this.numerator = Math.abs(this.numerator);
 			this.denominator = Math.abs(this.denominator);
 		} else {
@@ -71,7 +71,7 @@ var Fraction = (function(){
 			throw new Error('Can\'t divide by zero.');
 		}
 
-		// This is the best way to represent zero and 
+		// This is the best way to represent zero and
 		// not break calculations with this fraction.
 		if (numerator === 0){
 			this.numerator = 0;
@@ -90,7 +90,7 @@ var Fraction = (function(){
 
 		var numeratorCmp = this.numerator - other.numerator,
 			denominatorCmp = this.denominator - other.denominator;
-		
+
 		return Math.abs(numeratorCmp) - Math.abs(denominatorCmp) === 0;
 	};
 	Fraction.prototype.add = function(other) {
@@ -104,7 +104,7 @@ var Fraction = (function(){
 		var leftSide = this.numerator * (lcd / this.denominator),
 			rightSide = other.numerator * (lcd / other.denominator),
 			newNumberator = leftSide + rightSide;
-		
+
 		var additionResult = new Fraction(newNumberator, lcd);
 		return additionResult;
 	};
@@ -119,7 +119,7 @@ var Fraction = (function(){
 		var leftSide = this.numerator * (lcd / this.denominator),
 			rightSide = other.numerator * (lcd / other.denominator),
 			newNumberator = leftSide - rightSide;
-		
+
 		var subtractionResult = new Fraction(newNumberator, lcd);
 		return subtractionResult;
 	};

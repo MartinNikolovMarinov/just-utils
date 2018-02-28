@@ -1,15 +1,15 @@
 'use strict';
-var assert = require('./../assertModule/assertModule');
+var assert = require('./tests/lib/assertModule');
 
 var MatrixWrap = (function (){
 	// Constructor
 	function MatrixWrap (arrOfArrays) {
-		this.setValue(arrOfArrays); 
+		this.setValue(arrOfArrays);
 	}
 
 	// Getters/Setters
 	MatrixWrap.prototype.setValue = function(matrix) {
-		assert.isTrue(isValidMatrix(matrix), 
+		assert.isTrue(isValidMatrix(matrix),
 			'MatrixWrap.setValue() ==> Invalid matrix');
 		this._value = matrix;
 		this._rows = this._value.length;
@@ -21,8 +21,8 @@ var MatrixWrap = (function (){
 
 	// private Methods :
 
-	// A valid matrix is an array with arrays, consisting of 
-	// at least one array and all columns must have the same 
+	// A valid matrix is an array with arrays, consisting of
+	// at least one array and all columns must have the same
 	// amount of items (no jagged arrays allowed).
 	// @matrix the array to be checked.
 	// returns true or false.
@@ -46,21 +46,21 @@ var MatrixWrap = (function (){
 	// NxK + NxK --> valid.
 	// returns true or false.
 	var canAddMatrices = function (matrix1, matrix2) {
-		if (matrix1._rows !== matrix2._rows || 
+		if (matrix1._rows !== matrix2._rows ||
 			matrix1._cols !== matrix2._cols) {
 			return false;
 		}
 
 		return true;
 	};
-	// Rotations to the right means that the rows become 
+	// Rotations to the right means that the rows become
 	// cols and the last index is taken as the new first.
 	// @matrix input matrix.
 	// returns @resultMatrix of type array of arrays.
 	var rotateRight =  function (matrix) {
 		var resultMatrix = [];
 		for (var i = matrix._cols - 1; i >= 0; i--) {
-			
+
 			resultMatrix[i] = [];
 			for (var j = matrix._rows - 1; j >= 0; j--) {
 				resultMatrix[i].push(matrix._value[j][i]);
@@ -70,7 +70,7 @@ var MatrixWrap = (function (){
 		return resultMatrix;
 	};
 	// Rotations to the left is a bit harder to explain..
-	// 1 2	  		   6 4	
+	// 1 2	  		   6 4
 	// 3 4 => 2 4 6 => 4 3 => 5 3 1
 	// 5 6	  1 3 5    2 1    6 4 2
 	// @matrix input matrix.
@@ -78,9 +78,9 @@ var MatrixWrap = (function (){
 	var rotateLeft = function (matrix) {
 		var resultMatrix = [],
 			lastCol;
-		
+
 		for (var i = 0; i <  matrix._cols; i++) {
-			
+
 			lastCol = matrix._cols - i - 1;
 			resultMatrix[lastCol] = [];
 			for (var j = 0; j <  matrix._rows; j++) {
@@ -109,12 +109,12 @@ var MatrixWrap = (function (){
 						matrix._value[0][0] * matrix._value[1][2] * matrix._value[2][1] +
 						matrix._value[0][2] * matrix._value[1][1] * matrix._value[2][0];
 
-		return leftSide - rightSide;		
+		return leftSide - rightSide;
 	};
 
 	// Methods on the prototype :
 
-	// Clones the current MatrixWrap object. 
+	// Clones the current MatrixWrap object.
 	MatrixWrap.prototype.clone = function() {
 		var resultMatrix = [];
 
@@ -131,11 +131,11 @@ var MatrixWrap = (function (){
 	// Adds two MatrixWrap objects.
 	// @other input MatrixWrap
 	// This method changes the current object
-	// and returns this object! 
+	// and returns this object!
 	MatrixWrap.prototype.add = function (other) {
-		assert.isTrue((other instanceof MatrixWrap), 
+		assert.isTrue((other instanceof MatrixWrap),
 			'MatrixWrap.add() ==> other must be an instance of MatrixWrap');
-		assert.isTrue(canAddMatrices(this, other), 
+		assert.isTrue(canAddMatrices(this, other),
 			'MatrixWrap.add() ==> only matrices with the same dimensions can be added');
 
 		for (var i = 0; i < this._rows; i++) {
@@ -151,9 +151,9 @@ var MatrixWrap = (function (){
 	// This method changes the current object
 	// and returns this!
 	MatrixWrap.prototype.sub = function (other) {
-		assert.isTrue((other instanceof MatrixWrap), 
+		assert.isTrue((other instanceof MatrixWrap),
 			'MatrixWrap.sub() ==> other must be an instance of MatrixWrap');
-		assert.isTrue(canAddMatrices(this, other), 
+		assert.isTrue(canAddMatrices(this, other),
 			'MatrixWrap.sub() ==> only matrices with the same dimensions can be subtracted.');
 
 		for (var i = 0; i < this._rows; i++) {
@@ -184,7 +184,7 @@ var MatrixWrap = (function (){
 	// Multiplies a matrix by a scalar.
 	// Every element is multiplied by the scalar.
 	// @n the input scalar.
-	// This method changes the current object and 
+	// This method changes the current object and
 	// returns this.
 	MatrixWrap.prototype.scale = function (n) {
 		assert.isNumber(n, 'MatrixWrap.scale() ==> the scalar must be a number.');
@@ -197,15 +197,15 @@ var MatrixWrap = (function (){
 
 		return this;
 	};
-	// This function rotates the current MatrixWrap in 
+	// This function rotates the current MatrixWrap in
 	// left or right direction depending on the user input
 	// @direction - valid directions are the following strings :
 	// 'left' and 'right'.
-	// This function changes the current object and 
-	// returns this. 
+	// This function changes the current object and
+	// returns this.
 	MatrixWrap.prototype.rotate90 = function (direction) {
 		var resultMatrix = [];
-		
+
 		if (direction === 'right') {
 			resultMatrix = rotateRight(this);
 		}
@@ -233,7 +233,7 @@ var MatrixWrap = (function (){
 
 				this._value[i][j] = this._value[lastRow][lastCol];
 				this._value[lastRow][lastCol] = temp;
-				
+
 				index++;
 				if (index === matrixCenter) {
 					return this;
@@ -246,14 +246,14 @@ var MatrixWrap = (function (){
 	// This function multiplies this object by a vector,
 	// where a vector is considered to be only column vector.
 	// @vector the input MatrixWrap object.
-	// This function changes the current Object and 
+	// This function changes the current Object and
 	// returns this.
 	MatrixWrap.prototype.multByVector = function (vector) {
-		assert.isTrue(vector instanceof MatrixWrap, 
+		assert.isTrue(vector instanceof MatrixWrap,
 			'MatrixWrap.multByVector() ==> the vector must be an instance of MatrixWrap');
 		assert.isTrue(vector._cols === 1,
 			'MatrixWrap.multByVector() ==> a column vector is a MatrixWrap with exactly 1 col and n rows.');
-		assert.isTrue(this._cols === vector._rows, 
+		assert.isTrue(this._cols === vector._rows,
 			'MatrixWrap.multByVector() ==> this MatrixWrap columns must be equal to the vector rows');
 
 		var resultMatrix = [],
@@ -277,12 +277,12 @@ var MatrixWrap = (function (){
 	// Valid multiplication can happen if this object @_cols
 	// are equal to the matrix @_rows.
 	// @matrix the input MatrixWrap.
-	// This function changes the current Object and 
+	// This function changes the current Object and
 	// returns this.
 	MatrixWrap.prototype.mult = function (matrix) {
-		assert.isTrue(matrix instanceof MatrixWrap, 
+		assert.isTrue(matrix instanceof MatrixWrap,
 			'MatrixWrap.mult() ==> the matrix must be an instance of MatrixWrap');
-		assert.isTrue(this._cols === matrix._rows, 
+		assert.isTrue(this._cols === matrix._rows,
 			'MatrixWrap.mult() ==> this MatrixWrap columns must be equal to the matrix rows');
 
 		var resultMatrix = [],
@@ -298,7 +298,7 @@ var MatrixWrap = (function (){
 				for (var k = 0; k < matrix._rows; k++) {
 					currRowSum += this._value[i][k] * matrix._value[k][j];
 				}
-				
+
 				resultMatrix[i].push(currRowSum);
 			}
 		}
@@ -325,7 +325,7 @@ var MatrixWrap = (function (){
 	MatrixWrap.prototype.rightMultIdentity = function () {
 		var resultMatrix = [];
 		for (var i = 0; i < this._cols; i++) {
-			
+
 			resultMatrix[i] = [];
 			for (var j = 0; j < this._cols; j++) {
 				if (i === j) {
@@ -345,7 +345,7 @@ var MatrixWrap = (function (){
 	MatrixWrap.prototype.leftMultIdentity = function () {
 		var resultMatrix = [];
 		for (var i = 0; i < this._rows; i++) {
-			
+
 			resultMatrix[i] = [];
 			for (var j = 0; j < this._rows; j++) {
 				if (i === j) {
@@ -365,7 +365,7 @@ var MatrixWrap = (function (){
 	MatrixWrap.prototype.zeroMatrixRight = function () {
 		var resultMatrix = [];
 		for (var i = 0; i < this._cols; i++) {
-			
+
 			resultMatrix[i] = [];
 			for (var j = 0; j < this._cols; j++) {
 				resultMatrix[i][j] = 0;
@@ -380,7 +380,7 @@ var MatrixWrap = (function (){
 	MatrixWrap.prototype.zeroMatrixLeft = function () {
 		var resultMatrix = [];
 		for (var i = 0; i < this._rows; i++) {
-			
+
 			resultMatrix[i] = [];
 			for (var j = 0; j < this._rows; j++) {
 				resultMatrix[i][j] = 0;
