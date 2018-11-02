@@ -160,7 +160,8 @@ export class AjaxService implements snow.IAjaxService {
     if (oldLen > 0) {
       url += '?';
       keys.forEach((key: string, i: number): void => {
-        const val = oldParams[key] || '';
+        const paramIsMissing = (oldParams[key] === undefined || oldParams[key] === null)
+        const val = paramIsMissing ? '' : oldParams[key];
         if (i < oldLen - 1) url += key + '=' + val + '&';
         else url += key + '=' + val;
       });
@@ -171,7 +172,8 @@ export class AjaxService implements snow.IAjaxService {
     if (newLen > 0) {
       url += oldLen > 0 ? '&' : '?';
       keys.forEach((key: string, i: number): void => {
-        const val = params[key] || '';
+        const paramIsMissing = (params[key] === undefined || params[key] === null)
+        const val = paramIsMissing ? '' : params[key];
         if (i < newLen - 1) url += key + '=' + val + '&';
         else url += key + '=' + val;
       });
